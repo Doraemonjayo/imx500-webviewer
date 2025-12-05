@@ -101,7 +101,7 @@ def gen_frames():
             last_results = parse_detections(metadata)
             draw_detections(request)
             frame = request.make_array("main")
-            frame_bgr = frame[:, :, :[2, 1, 0]]
+            frame_bgr = frame[:, :, [2, 1, 0]]
             ret, buffer = cv2.imencode('.jpg', frame_bgr)
             frame_bytes = buffer.tobytes()
             yield (b'--frame\r\n'

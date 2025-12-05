@@ -11,7 +11,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ドライバーのインストール(RaspberryPiのpicamera2とopencvはapt版)
 ```bash
 sudo apt update && sudo apt upgrade -y
-sudo apt install imx500-all python3-picamera2 python3-opencv
+sudo apt install imx500-all python3-picamera2 python3-opencv python3-openexr
 sudo reboot
 ```
 
