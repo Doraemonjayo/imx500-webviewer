@@ -1,6 +1,3 @@
-# Portions of this software are based on:
-# https://github.com/raspberrypi/picamera2/blob/main/examples/imx500/imx500_object_detection_demo.py
-
 from flask import Flask, Response
 import cv2
 import imx500_object_detection

@@ -180,14 +180,15 @@ def init():
     last_results = None
     picam2.pre_callback = None
 
-def get_results_and_frame():
+def get_results_and_frame(draw=True):
     global last_results
 
     request = picam2.capture_request()
     try:
         metadata = request.get_metadata()
         last_results = parse_detections(metadata)
-        draw_detections(request)
+        if draw:
+            draw_detections(request)
         frame = request.make_array("main")
     except Exception:
         last_results = None
