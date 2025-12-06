@@ -9,12 +9,11 @@ import imx500_object_detection
 app = Flask(__name__)
 
 def gen_frames():
-    global last_results
     while True:
         request = imx500_object_detection.picam2.capture_request()
         try:
             metadata = request.get_metadata()
-            last_results = imx500_object_detection.parse_detections(metadata)
+            imx500_object_detection.last_results = imx500_object_detection.parse_detections(metadata)
             imx500_object_detection.draw_detections(request)
             frame = request.make_array("main")
             ret, buffer = cv2.imencode('.jpg', frame[:, :, [2, 1, 0]])

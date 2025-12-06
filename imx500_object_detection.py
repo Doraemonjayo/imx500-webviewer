@@ -138,7 +138,7 @@ def get_args():
 def init():
     global args, imx500, intrinsics, picam2, last_results
 
-    args = get_args
+    args = get_args()
 
     # This must be called before instantiation of Picamera2
     imx500 = IMX500(args.model)
