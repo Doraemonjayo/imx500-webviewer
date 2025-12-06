@@ -10,18 +10,14 @@ app = Flask(__name__)
 
 def gen_frames():
     while True:
-        request = imx500_object_detection.picam2.capture_request()
         try:
-            metadata = request.get_metadata()
-            imx500_object_detection.last_results = imx500_object_detection.parse_detections(metadata)
-            imx500_object_detection.draw_detections(request)
-            frame = request.make_array("main")
+            results, frame = imx500_object_detection.get_results_and_frame()
             ret, buffer = cv2.imencode('.jpg', frame[:, :, [2, 1, 0]])
             frame_bytes = buffer.tobytes()
             yield (b'--frame\r\n'
                 b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
-        finally:
-            request.release()
+        except Exception:
+            pass
 
 @app.route('/video_feed')
 def video_feed():

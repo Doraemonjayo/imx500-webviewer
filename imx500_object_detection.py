@@ -180,6 +180,23 @@ def init():
     last_results = None
     picam2.pre_callback = None
 
+def get_results_and_frame():
+    global last_results
+
+    request = picam2.capture_request()
+    try:
+        metadata = request.get_metadata()
+        last_results = parse_detections(metadata)
+        draw_detections(request)
+        frame = request.make_array("main")
+    except Exception:
+        last_results = None
+        frame = None
+    finally:
+        request.release()
+
+    return last_results, frame
+
 if __name__ == "__main__":
     init()
 
