@@ -17,7 +17,7 @@ RED = np.array([255, 0, 0, 255], dtype=np.uint8)
 def create_and_draw_masks(request: CompletedRequest):
     """Create masks from the output tensor and draw them on the main output image."""
     masks = create_masks(request)
-    draw_masks(masks)
+    draw_masks(request, masks)
 
 
 def create_masks(request: CompletedRequest) -> Dict[int, np.ndarray]:
@@ -43,7 +43,7 @@ def create_masks(request: CompletedRequest) -> Dict[int, np.ndarray]:
     return res
 
 
-def draw_masks(masks: Dict[int, np.ndarray]):
+def draw_masks(request: CompletedRequest, masks: Dict[int, np.ndarray]):
     """Draw the masks directly onto the ISP output (main stream)."""
     if not masks:
         return
