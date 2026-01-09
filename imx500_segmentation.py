@@ -48,22 +48,20 @@ def draw_masks(request: CompletedRequest, masks: Dict[int, np.ndarray]):
     if not masks:
         return
 
-    # masks を合成（RGBA）
     input_w, input_h = imx500.get_input_size()
     overlay = np.zeros((input_h, input_w, 4), dtype=np.uint8)
     for v in masks.values():
-        overlay += v
+        overlay = np.maximum(overlay, v)  # 加算より安全
 
-    # main stream に直接書き込む
     with MappedArray(request, "main") as m:
-        img = m.array  # BGR, uint8
+        img = m.array  # BGR
 
         alpha = overlay[..., 3:4] / 255.0
-        fg = alpha > 0
+        mask = alpha[..., 0] > 0
 
-        img[fg[..., 0]] = (
-            img[fg[..., 0]] * (1.0 - alpha[fg]) +
-            overlay[..., :3][fg[..., 0]] * alpha[fg]
+        img[mask] = (
+            img[mask] * (1.0 - alpha[mask]) +
+            overlay[..., :3][mask] * alpha[mask]
         ).astype(np.uint8)
 
 
