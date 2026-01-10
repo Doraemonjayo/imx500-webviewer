@@ -15,10 +15,10 @@ from picamera2.devices.imx500 import NetworkIntrinsics
 
 def draw_mask(frame: np.ndarray, mask: np.ndarray):
     h, w = frame.shape[:2]
-    mask_color = np.zeros((mask.shape[0], mask.shape[1], 3), dtype=np.uint8)
-    mask_color[mask > 0] = (0, 255, 0)
+    mask_color = np.zeros((mask.shape[0], mask.shape[1], 4), dtype=np.uint8)
+    mask_color[mask > 0] = (0, 255, 0, 255)
     mask_color = cv2.resize(mask_color, (w, h), interpolation=cv2.INTER_NEAREST)
-    idx = np.any(mask_color != (0, 0, 0), axis=2)
+    idx = np.any(mask_color != (0, 0, 0, 0), axis=2)
     frame[idx] = mask_color[idx]
 
 def get_args():
