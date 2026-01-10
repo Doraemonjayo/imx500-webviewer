@@ -72,7 +72,8 @@ def get_frame():
         mask = imx500.get_outputs(metadata=request.get_metadata())[0]
         draw_mask(frame, mask)
 
-    except Exception:
+    except Exception as e:
+        print(e)
         frame = None
     finally:
         request.release()

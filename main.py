@@ -13,8 +13,8 @@ def gen_frames():
             frame_bytes = buffer.tobytes()
             yield (b'--frame\r\n'
                 b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
-        except Exception:
-            pass
+        except Exception as e:
+            print(e)
 
 @app.route('/video_feed')
 def video_feed():
