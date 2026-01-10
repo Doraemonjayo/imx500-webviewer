@@ -6,64 +6,20 @@ import sys
 import time
 from typing import Dict
 
+import cv2
 import numpy as np
 
 from picamera2 import MappedArray, CompletedRequest, Picamera2
 from picamera2.devices import IMX500
 from picamera2.devices.imx500 import NetworkIntrinsics
 
-RED = np.array([255, 0, 0, 255], dtype=np.uint8)
-
-def create_and_draw_masks(request: CompletedRequest):
-    """Create masks from the output tensor and draw them on the main output image."""
-    masks = create_masks(request)
-    draw_masks(request, masks)
-
-
-def create_masks(request: CompletedRequest) -> Dict[int, np.ndarray]:
-    """Create masks from the output tensor, scaled to the ISP output."""
-    res = {}
-    np_outputs = imx500.get_outputs(metadata=request.get_metadata())
-    input_w, input_h = imx500.get_input_size()
-    if np_outputs is None:
-        return res
-    mask = np_outputs[0]
-    found_indices = np.unique(mask)
-
-    for i in found_indices:
-        if i == 0:
-            continue
-        output_shape = [input_h, input_w, 4]
-        colour = [(0, 0, 0, 0), RED.copy()]
-        colour[1][3] = 150  # update the alpha value here, to save setting it later
-        overlay = np.array(mask == i, dtype=np.uint8)
-        overlay = np.array(colour)[overlay].reshape(output_shape).astype(np.uint8)
-        # No need to resize the overlay, it will be stretched to the output window.
-        res[i] = overlay
-    return res
-
-
-def draw_masks(request: CompletedRequest, masks: Dict[int, np.ndarray]):
-    """Draw the masks directly onto the ISP output (main stream)."""
-    if not masks:
-        return
-
-    input_w, input_h = imx500.get_input_size()
-    overlay = np.zeros((input_h, input_w, 4), dtype=np.uint8)
-    for v in masks.values():
-        overlay = np.maximum(overlay, v)  # 加算より安全
-
-    with MappedArray(request, "main") as m:
-        img = m.array  # BGR
-
-        alpha = overlay[..., 3:4] / 255.0
-        mask = alpha[..., 0] > 0
-
-        img[mask] = (
-            img[mask] * (1.0 - alpha[mask]) +
-            overlay[..., :3][mask] * alpha[mask]
-        ).astype(np.uint8)
-
+def draw_mask(frame: np.ndarray, mask: np.ndarray):
+    h, w = frame.shape[:2]
+    mask_color = np.zeros((mask.shape[0], mask.shape[1], 3), dtype=np.uint8)
+    mask_color[mask > 0] = (0, 255, 0)
+    mask_color = cv2.resize(mask_color, (w, h), interpolation=cv2.INTER_NEAREST)
+    idx = np.any(mask_color != (0, 0, 0), axis=2)
+    frame[idx] = mask_color[idx]
 
 def get_args():
     """Parse command line arguments."""
@@ -112,8 +68,10 @@ def init():
 def get_frame():
     request = picam2.capture_request()
     try:
-        create_and_draw_masks(request)
-        frame = request.make_array("main")
+        frame = request.make_array("main").copy()
+        mask = imx500.get_outputs(metadata=request.get_metadata())[0]
+        draw_mask(frame, mask)
+
     except Exception:
         frame = None
     finally:
