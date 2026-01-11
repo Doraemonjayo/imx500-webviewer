@@ -181,8 +181,10 @@ def init():
     last_results = None
     picam2.pre_callback = None
 
-def get_results_and_frame(draw=args.draw):
-    global last_results
+def get_results_and_frame(draw=None):
+    global last_results, args
+    if draw == None:
+        draw = args.draw
 
     request = picam2.capture_request()
     try:
