@@ -133,6 +133,7 @@ def get_args():
                         help="Path to the labels file")
     parser.add_argument("--print-intrinsics", action="store_true",
                         help="Print JSON network_intrinsics then exit")
+    parser.add_argument("--draw", type=bool, help="draw", default=True)
     return parser.parse_args()
 
 def init():
@@ -180,7 +181,7 @@ def init():
     last_results = None
     picam2.pre_callback = None
 
-def get_results_and_frame(draw=True):
+def get_results_and_frame(draw=args.draw):
     global last_results
 
     request = picam2.capture_request()
