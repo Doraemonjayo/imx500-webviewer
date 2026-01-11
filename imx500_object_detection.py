@@ -133,7 +133,7 @@ def get_args():
                         help="Path to the labels file")
     parser.add_argument("--print-intrinsics", action="store_true",
                         help="Print JSON network_intrinsics then exit")
-    parser.add_argument("--draw", type=bool, help="draw", default=True)
+    parser.add_argument("--disable-draw", action="store_true", help="disable draw")
     return parser.parse_args()
 
 def init():
@@ -184,7 +184,7 @@ def init():
 def get_results_and_frame(draw=None):
     global last_results, args
     if draw == None:
-        draw = args.draw
+        draw = not args.disable_draw
 
     request = picam2.capture_request()
     try:
