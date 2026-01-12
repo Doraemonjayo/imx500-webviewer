@@ -21,6 +21,7 @@ class YOLOSegment(Model):
             labels_path,
             dtype=str,
             delimiter="\n",
+            ndmin=1
         )
 
     def post_process(self, output_tensors):
