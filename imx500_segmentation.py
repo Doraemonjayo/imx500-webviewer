@@ -3,9 +3,6 @@
 
 import argparse
 import sys
-import time
-from typing import Dict
-
 import cv2
 import numpy as np
 
