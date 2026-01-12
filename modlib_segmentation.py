@@ -77,4 +77,4 @@ def run(cb):
 
             # roi_img = img[y1:y2, x1:x2]
 
-            cb(img[0:h/2, 0:w/2])
+            cb(img[0:int(h/2), 0:int(w/2)])
