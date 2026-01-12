@@ -46,6 +46,7 @@ def init():
     args = get_args()
     device = AiCamera(frame_rate=args.fps)
     model = YOLOSegment(args.model, args.labels)
+    device.deploy(model)
     annotator = Annotator()
     threshold = args.threshold
     draw = not args.disable_draw
