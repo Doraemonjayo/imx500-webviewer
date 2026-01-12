@@ -45,7 +45,7 @@ def get_args():
 def init():
     global args, device, model, annotator, threshold, draw
     args = get_args()
-    device = AiCamera(frame_rate=args.fps, image_size=(320, 240), enable_input_tensor=True)
+    device = AiCamera(frame_rate=args.fps, image_size=(640, 480), enable_input_tensor=True)
     model = YOLOSegment(args.model, args.labels)
     device.deploy(model)
     annotator = Annotator()
@@ -70,10 +70,10 @@ def run(cb):
             # y1 = int(ry * h)
             # x2 = int((rx + rw) * w)
             # y2 = int((ry + rh) * h)
-            x1 = 0
-            y1 = 0
-            x2 = int(w / 2)
-            y2 = int(h / 2)
+            # x1 = 0
+            # y1 = 0
+            # x2 = int(w / 2)
+            # y2 = int(h / 2)
 
             roi_img = img[y1:y2, x1:x2]
 
