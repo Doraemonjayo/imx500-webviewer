@@ -14,7 +14,7 @@ class YOLOSegment(Model):
             model_file=model_path,
             model_type=MODEL_TYPE.CONVERTED,
             color_format=COLOR_FORMAT.RGB,
-            preserve_aspect_ratio=False,
+            preserve_aspect_ratio=True,
         )
 
         self.labels = np.genfromtxt(
