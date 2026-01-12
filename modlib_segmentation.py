@@ -36,16 +36,16 @@ def get_args():
     parser.add_argument("--labels", type=str,
                         default="assets/labels.txt")
     parser.add_argument("--threshold", type=float,
-                        default=0.50)
+                        default=0.20)
     parser.add_argument("--fps", type=int,
-                        default=10)
+                        default=5)
     parser.add_argument("--disable-draw", action="store_true")
     return parser.parse_args()
 
 def init():
     global args, device, model, annotator, threshold, draw
     args = get_args()
-    device = AiCamera(frame_rate=args.fps, image_size=(320, 240))
+    device = AiCamera(frame_rate=args.fps, image_size=(160, 120))
     model = YOLOSegment(args.model, args.labels)
     device.deploy(model)
     annotator = Annotator()
