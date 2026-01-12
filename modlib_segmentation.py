@@ -66,10 +66,14 @@ def run(cb):
             rx, ry, rw, rh = frame.roi  # 0.0〜1.0
 
             h, w, _ = img.shape
-            x1 = int(rx * w)
-            y1 = int(ry * h)
-            x2 = int((rx + rw) * w)
-            y2 = int((ry + rh) * h)
+            # x1 = int(rx * w)
+            # y1 = int(ry * h)
+            # x2 = int((rx + rw) * w)
+            # y2 = int((ry + rh) * h)
+            x1 = 0
+            y1 = 0
+            x2 = int(w / 2)
+            y2 = int((h / 2)
 
             roi_img = img[y1:y2, x1:x2]
 
