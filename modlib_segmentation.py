@@ -73,7 +73,7 @@ def run(cb):
             x1 = 0
             y1 = 0
             x2 = int(w / 2)
-            y2 = int((h / 2)
+            y2 = int(h / 2)
 
             roi_img = img[y1:y2, x1:x2]
 
