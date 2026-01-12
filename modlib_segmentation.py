@@ -61,5 +61,16 @@ def run(cb):
             if (draw):
                 annotator.annotate_instance_segments(frame, detections)
                 annotator.annotate_boxes(frame, detections, labels=labels)
-            print(frame.roi)
-            cb(frame.image)
+            # --- ROI crop ---
+            img = frame.image
+            rx, ry, rw, rh = frame.roi  # 0.0〜1.0
+
+            h, w, _ = img.shape
+            x1 = int(rx * w)
+            y1 = int(ry * h)
+            x2 = int((rx + rw) * w)
+            y2 = int((ry + rh) * h)
+
+            roi_img = img[y1:y2, x1:x2]
+
+            cb(roi_img)
