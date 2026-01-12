@@ -45,7 +45,7 @@ def get_args():
 def init():
     global args, device, model, annotator, threshold, draw
     args = get_args()
-    device = AiCamera(frame_rate=args.fps)
+    device = AiCamera(frame_rate=args.fps, image_size=(320, 240))
     model = YOLOSegment(args.model, args.labels)
     device.deploy(model)
     annotator = Annotator()
